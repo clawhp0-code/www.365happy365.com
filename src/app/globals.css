@@ -1,0 +1,198 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   Base – Korean-optimized typography
+   ============================================================ */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #FAFAF8;
+  color: #1C1917;
+  line-height: 1.85;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Korean text – prevent awkward mid-word breaks */
+p,
+li,
+td,
+th,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+blockquote {
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+/* ============================================================
+   Scrollbar
+   ============================================================ */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #D6D0C8; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #A8A29E; }
+
+/* ============================================================
+   Reading Progress Bar
+   ============================================================ */
+#reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  width: 0%;
+  background: #D97706;
+  z-index: 200;
+  transition: width 0.1s linear;
+  pointer-events: none;
+}
+
+/* ============================================================
+   MDX Article Content – Korean blog typography
+   ============================================================ */
+.mdx-content {
+  @apply prose prose-stone max-w-none;
+  font-size: 1.0625rem;
+  line-height: 1.95;
+}
+
+.mdx-content p {
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  margin-bottom: 1.4em;
+}
+
+.mdx-content li {
+  word-break: keep-all;
+  line-height: 1.85;
+  margin-bottom: 0.4em;
+}
+
+.mdx-content h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1C1917;
+  margin-top: 2.8rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #E8E4DC;
+  letter-spacing: -0.01em;
+  word-break: keep-all;
+}
+
+.mdx-content h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1C1917;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+  word-break: keep-all;
+}
+
+.mdx-content a {
+  color: #D97706;
+  text-decoration: none;
+  font-weight: 500;
+  border-bottom: 1px solid #FDE68A;
+  transition: color 0.15s, border-color 0.15s;
+}
+.mdx-content a:hover {
+  color: #B45309;
+  border-color: #D97706;
+}
+
+.mdx-content blockquote {
+  border-left: 3px solid #F59E0B;
+  background: #FFFBEB;
+  border-radius: 0 0.5rem 0.5rem 0;
+  padding: 1rem 1.5rem;
+  font-style: normal;
+  color: #44403C;
+  margin: 1.75rem 0;
+}
+.mdx-content blockquote p::before,
+.mdx-content blockquote p::after { content: none; }
+
+.mdx-content code {
+  background: #F5F5F4;
+  color: #292524;
+  padding: 0.15em 0.45em;
+  border-radius: 0.25rem;
+  font-size: 0.875em;
+}
+.mdx-content pre {
+  background: #1C1917;
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  overflow-x: auto;
+}
+.mdx-content pre code {
+  background: transparent;
+  color: #E7E5E4;
+  padding: 0;
+  font-size: 0.875rem;
+}
+
+.mdx-content img {
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.08);
+}
+
+.mdx-content hr {
+  border: none;
+  border-top: 1px solid #E8E4DC;
+  margin: 2.5rem 0;
+}
+
+.mdx-content ul,
+.mdx-content ol {
+  padding-left: 1.5rem;
+}
+
+/* ============================================================
+   Category Colors (badge classes)
+   ============================================================ */
+.cat-health   { @apply bg-emerald-50 text-emerald-700; }
+.cat-food     { @apply bg-amber-50 text-amber-700; }
+.cat-essay    { @apply bg-stone-100 text-stone-600; }
+.cat-exercise { @apply bg-sky-50 text-sky-700; }
+
+/* ============================================================
+   Card
+   ============================================================ */
+.card-hover {
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.card-hover:hover {
+  box-shadow: 0 4px 16px -4px rgb(0 0 0 / 0.1);
+}
+
+/* ============================================================
+   Focus
+   ============================================================ */
+*:focus-visible {
+  outline: 2px solid #F59E0B;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ============================================================
+   Animations
+   ============================================================ */
+.animate-fade-in {
+  animation: fadeIn 0.35s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
