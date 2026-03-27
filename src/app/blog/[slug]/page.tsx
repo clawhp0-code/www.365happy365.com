@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { MDXRemote } from "next-mdx-remote/rsc";
+import remarkGfm from "remark-gfm";
 import {
   getPostBySlug,
   getAllPostSlugs,
@@ -106,7 +107,7 @@ export default async function PostPage({ params }: PostPageProps) {
             전문적인 의료 정보가 아니오니 참고용으로만 활용해 주세요.
           </div>
           <div className="mdx-content">
-            <MDXRemote source={post.content} />
+            <MDXRemote source={post.content} options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }} />
           </div>
 
           {/* ── Bottom navigation ── */}
