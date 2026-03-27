@@ -9,11 +9,13 @@ export default async function HomePage() {
   return (
     <div className="animate-fade-in">
 
-      {/* ── Tagline ── */}
-      <div className="border-b border-stone-200/60 py-6 px-4">
+      {/* ── Notice ── */}
+      <div className="bg-stone-50 border-b border-stone-200/60 py-5 px-4">
         <div className="max-w-5xl mx-auto">
-          <p className="text-sm text-stone-500 word-break-keep">
-            건강한 삶, 맛있는 음식, 활기찬 운동, 그리고 일상의 작은 행복을 나눕니다.
+          <p className="text-sm text-stone-600 leading-[1.8] word-break-keep">
+            최근 건강 검진에서 대사증후군 진단을 받아, AI의 도움을 받아 건강을
+            챙기려고 시작한 개인 블로그입니다. 전문적인 의료 정보가 아닌 개인
+            공부 기록이오니 참조하시기 바랍니다.
           </p>
         </div>
       </div>
