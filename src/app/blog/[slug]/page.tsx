@@ -101,6 +101,10 @@ export default async function PostPage({ params }: PostPageProps) {
 
         {/* ── Article content ── */}
         <div className="max-w-3xl mx-auto px-4 sm:px-6 py-10">
+          <div className="mb-8 p-4 bg-amber-50 border border-amber-200 rounded-lg text-sm text-amber-800 leading-[1.8] word-break-keep">
+            이 글은 AI의 도움을 받아 개인적인 건강 관리 차원에서 작성한 것입니다.
+            전문적인 의료 정보가 아니오니 참고용으로만 활용해 주세요.
+          </div>
           <div className="mdx-content">
             <MDXRemote source={post.content} />
           </div>
