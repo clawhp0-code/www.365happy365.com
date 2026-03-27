@@ -142,6 +142,55 @@ blockquote {
   font-size: 0.875rem;
 }
 
+/* ── Table – Excel-like formatting ── */
+.mdx-content table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #D6D3D1;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  margin: 1.5rem 0;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+}
+
+.mdx-content thead {
+  background: #292524;
+}
+
+.mdx-content thead th {
+  color: #FAFAF9;
+  font-weight: 600;
+  font-size: 0.875rem;
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border: 1px solid #44403C;
+  white-space: nowrap;
+}
+
+.mdx-content tbody tr {
+  background: #FFFFFF;
+}
+
+.mdx-content tbody tr:nth-child(even) {
+  background: #FAFAF9;
+}
+
+.mdx-content tbody tr:hover {
+  background: #FEF3C7;
+}
+
+.mdx-content tbody td {
+  padding: 0.625rem 1rem;
+  border: 1px solid #E7E5E4;
+  color: #1C1917;
+}
+
+.mdx-content tbody td:first-child {
+  font-weight: 500;
+  background: #F5F5F4;
+}
+
 .mdx-content img {
   border-radius: 0.75rem;
   box-shadow: 0 2px 8px rgb(0 0 0 / 0.08);
