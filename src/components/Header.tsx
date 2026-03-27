@@ -79,6 +79,17 @@ export default function Header() {
                 {cat.label}
               </Link>
             ))}
+            <Link
+              href="/about"
+              className={cn(
+                "px-3 py-1.5 text-sm rounded-lg transition-colors",
+                pathname === "/about"
+                  ? "text-amber-600 font-semibold bg-amber-50"
+                  : "text-stone-500 hover:text-stone-900 hover:bg-stone-100/80"
+              )}
+            >
+              소개
+            </Link>
           </nav>
 
           {/* Mobile toggle */}
@@ -130,6 +141,17 @@ export default function Header() {
                 {cat.label}
               </Link>
             ))}
+            <Link
+              href="/about"
+              className={cn(
+                "px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
+                pathname === "/about"
+                  ? "text-amber-600 bg-amber-50"
+                  : "text-stone-700 hover:text-amber-600 hover:bg-stone-50"
+              )}
+            >
+              소개
+            </Link>
           </nav>
         </div>
       )}
