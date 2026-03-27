@@ -13,9 +13,9 @@ export default async function HomePage() {
       <div className="bg-stone-50 border-b border-stone-200/60 py-5 px-4">
         <div className="max-w-5xl mx-auto">
           <p className="text-sm text-stone-600 leading-[1.8] word-break-keep">
-            최근 건강 검진에서 대사증후군 진단을 받아, AI의 도움을 받아 건강을
-            챙기려고 시작한 개인 블로그입니다. 전문적인 의료 정보가 아닌 개인
-            공부 기록이오니 참조하시기 바랍니다.
+            최근 건강 검진에서 건강이 문제가 있다는 진단을 받아, AI의 도움을
+            받아 건강을 챙기려고 시작한 개인 블로그입니다. 전문적인 의료 정보가
+            아닌 개인 공부 기록이오니 참조하시기 바랍니다.
           </p>
         </div>
       </div>
