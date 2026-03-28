@@ -1,11 +1,13 @@
 import Link from "next/link";
 import { cn, getCategorySlug } from "@/lib/utils";
+import type { Locale } from "@/lib/i18n";
 
 interface CategoryBadgeProps {
   category: string;
   size?: "sm" | "md" | "lg";
   linked?: boolean;
   className?: string;
+  locale?: Locale;
 }
 
 const categoryStyles: Record<string, string> = {
@@ -13,6 +15,10 @@ const categoryStyles: Record<string, string> = {
   식품: "bg-amber-50 text-amber-700",
   에세이: "bg-stone-100 text-stone-600",
   운동: "bg-sky-50 text-sky-700",
+  Health: "bg-emerald-50 text-emerald-700",
+  Food: "bg-amber-50 text-amber-700",
+  Essay: "bg-stone-100 text-stone-600",
+  Exercise: "bg-sky-50 text-sky-700",
 };
 
 const sizeStyles = {
@@ -26,6 +32,7 @@ export default function CategoryBadge({
   size = "md",
   linked = false,
   className,
+  locale = "ko",
 }: CategoryBadgeProps) {
   const base = cn(
     "inline-flex items-center rounded-md font-medium transition-opacity duration-200",
@@ -39,7 +46,7 @@ export default function CategoryBadge({
 
   if (linked) {
     return (
-      <Link href={`/${getCategorySlug(category)}`} className={base}>
+      <Link href={`/${locale}/${getCategorySlug(category)}`} className={base}>
         {content}
       </Link>
     );

@@ -1,18 +1,26 @@
 import { clsx, type ClassValue } from "clsx";
 import { format, parseISO } from "date-fns";
 import { ko } from "date-fns/locale";
+import { enUS } from "date-fns/locale";
+import type { Locale } from "./i18n";
 
 export function cn(...inputs: ClassValue[]) {
   return clsx(inputs);
 }
 
-export function formatDate(dateString: string): string {
+export function formatDate(dateString: string, locale: Locale = "ko"): string {
   const date = parseISO(dateString);
+  if (locale === "en") {
+    return format(date, "MMM d, yyyy", { locale: enUS });
+  }
   return format(date, "yyyy년 M월 d일", { locale: ko });
 }
 
-export function formatDateShort(dateString: string): string {
+export function formatDateShort(dateString: string, locale: Locale = "ko"): string {
   const date = parseISO(dateString);
+  if (locale === "en") {
+    return format(date, "MMM d", { locale: enUS });
+  }
   return format(date, "M월 d일", { locale: ko });
 }
 
@@ -30,6 +38,10 @@ export function getCategorySlug(category: string): string {
     식품: "food",
     에세이: "essay",
     운동: "exercise",
+    Health: "health",
+    Food: "food",
+    Essay: "essay",
+    Exercise: "exercise",
   };
   return map[category] || category;
 }
@@ -44,12 +56,29 @@ export function getCategoryFromSlug(slug: string): string {
   return map[slug] || slug;
 }
 
+export function getCategoryFromSlugLocalized(slug: string, locale: Locale): string {
+  if (locale === "en") {
+    const map: Record<string, string> = {
+      health: "Health",
+      food: "Food",
+      essay: "Essay",
+      exercise: "Exercise",
+    };
+    return map[slug] || slug;
+  }
+  return getCategoryFromSlug(slug);
+}
+
 export function getCategoryColor(category: string): string {
   const colors: Record<string, string> = {
     건강: "health",
     식품: "food",
     에세이: "essay",
     운동: "exercise",
+    Health: "health",
+    Food: "food",
+    Essay: "essay",
+    Exercise: "exercise",
   };
   return colors[category] || "essay";
 }

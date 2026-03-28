@@ -4,18 +4,41 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import type { Locale } from "@/lib/i18n";
 
-const categories = [
-  { href: "/health",   label: "건강" },
-  { href: "/food",     label: "식품" },
-  { href: "/essay",    label: "에세이" },
-  { href: "/exercise", label: "운동" },
-];
+export interface HeaderStrings {
+  allPosts: string;
+  health: string;
+  food: string;
+  essay: string;
+  exercise: string;
+  about: string;
+  menuOpen: string;
+  mainMenu: string;
+}
 
-export default function Header() {
+interface HeaderProps {
+  locale: Locale;
+  strings: HeaderStrings;
+}
+
+export default function Header({ locale, strings }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
+
+  const categories = [
+    { href: `/${locale}/health`,   label: strings.health },
+    { href: `/${locale}/food`,     label: strings.food },
+    { href: `/${locale}/essay`,    label: strings.essay },
+    { href: `/${locale}/exercise`, label: strings.exercise },
+  ];
+
+  const otherLocale: Locale = locale === "ko" ? "en" : "ko";
+  const otherLocaleLabel = locale === "ko" ? "EN" : "한국어";
+
+  // Compute the switched-locale path
+  const switchedPath = pathname.replace(`/${locale}`, `/${otherLocale}`) || `/${otherLocale}`;
 
   useEffect(() => {
     const onScroll = () => setIsScrolled(window.scrollY > 10);
@@ -41,29 +64,29 @@ export default function Header() {
 
           {/* Logo */}
           <Link
-            href="/"
+            href={`/${locale}`}
             className="font-bold text-[15px] tracking-tight text-stone-900 hover:text-amber-600 transition-colors"
-            aria-label="365 Happy 365 홈"
+            aria-label="365 Happy 365"
           >
             <span className="text-amber-500">365</span>
-            <span className="mx-1 text-stone-300">·</span>
+            <span className="mx-1 text-stone-300">&middot;</span>
             <span>Happy</span>
-            <span className="mx-1 text-stone-300">·</span>
+            <span className="mx-1 text-stone-300">&middot;</span>
             <span className="text-amber-500">365</span>
           </Link>
 
           {/* Desktop nav */}
-          <nav className="hidden md:flex items-center gap-1" role="navigation" aria-label="메인 메뉴">
+          <nav className="hidden md:flex items-center gap-1" role="navigation" aria-label={strings.mainMenu}>
             <Link
-              href="/blog"
+              href={`/${locale}/blog`}
               className={cn(
                 "px-3 py-1.5 text-sm rounded-lg transition-colors",
-                pathname === "/blog"
+                pathname === `/${locale}/blog`
                   ? "text-amber-600 font-semibold bg-amber-50"
                   : "text-stone-500 hover:text-stone-900 hover:bg-stone-100/80"
               )}
             >
-              전체 글
+              {strings.allPosts}
             </Link>
             {categories.map((cat) => (
               <Link
@@ -80,35 +103,52 @@ export default function Header() {
               </Link>
             ))}
             <Link
-              href="/about"
+              href={`/${locale}/about`}
               className={cn(
                 "px-3 py-1.5 text-sm rounded-lg transition-colors",
-                pathname === "/about"
+                pathname === `/${locale}/about`
                   ? "text-amber-600 font-semibold bg-amber-50"
                   : "text-stone-500 hover:text-stone-900 hover:bg-stone-100/80"
               )}
             >
-              소개
+              {strings.about}
+            </Link>
+
+            {/* Language switcher */}
+            <Link
+              href={switchedPath}
+              className="ml-2 px-2.5 py-1 text-xs font-medium rounded-md border border-stone-200 text-stone-500 hover:text-stone-900 hover:border-stone-400 transition-colors"
+            >
+              {otherLocaleLabel}
             </Link>
           </nav>
 
           {/* Mobile toggle */}
-          <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="md:hidden p-2 rounded-lg text-stone-500 hover:text-stone-900 hover:bg-stone-100 transition-colors"
-            aria-expanded={isMenuOpen}
-            aria-label="메뉴 열기"
-          >
-            {isMenuOpen ? (
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            ) : (
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-            )}
-          </button>
+          <div className="flex items-center gap-2 md:hidden">
+            {/* Mobile language switcher */}
+            <Link
+              href={switchedPath}
+              className="px-2 py-1 text-xs font-medium rounded-md border border-stone-200 text-stone-500 hover:text-stone-900 transition-colors"
+            >
+              {otherLocaleLabel}
+            </Link>
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="p-2 rounded-lg text-stone-500 hover:text-stone-900 hover:bg-stone-100 transition-colors"
+              aria-expanded={isMenuOpen}
+              aria-label={strings.menuOpen}
+            >
+              {isMenuOpen ? (
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              ) : (
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              )}
+            </button>
+          </div>
         </div>
       </div>
 
@@ -117,15 +157,15 @@ export default function Header() {
         <div className="md:hidden bg-white border-t border-stone-100 animate-fade-in">
           <nav className="max-w-5xl mx-auto px-4 py-3 flex flex-col gap-0.5" role="navigation">
             <Link
-              href="/blog"
+              href={`/${locale}/blog`}
               className={cn(
                 "px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
-                pathname === "/blog"
+                pathname === `/${locale}/blog`
                   ? "text-amber-600 bg-amber-50"
                   : "text-stone-700 hover:text-amber-600 hover:bg-stone-50"
               )}
             >
-              전체 글
+              {strings.allPosts}
             </Link>
             {categories.map((cat) => (
               <Link
@@ -142,15 +182,15 @@ export default function Header() {
               </Link>
             ))}
             <Link
-              href="/about"
+              href={`/${locale}/about`}
               className={cn(
                 "px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
-                pathname === "/about"
+                pathname === `/${locale}/about`
                   ? "text-amber-600 bg-amber-50"
                   : "text-stone-700 hover:text-amber-600 hover:bg-stone-50"
               )}
             >
-              소개
+              {strings.about}
             </Link>
           </nav>
         </div>

@@ -1,19 +1,26 @@
 import Link from "next/link";
+import type { Locale } from "@/lib/i18n";
+import type { Dictionary } from "@/lib/dictionaries";
 
-const categories = [
-  { href: "/health",   label: "건강" },
-  { href: "/food",     label: "식품" },
-  { href: "/essay",    label: "에세이" },
-  { href: "/exercise", label: "운동" },
-];
+interface FooterProps {
+  locale: Locale;
+  dict: Dictionary;
+}
 
-const siteLinks = [
-  { href: "/blog",    label: "전체 글" },
-  { href: "/about",   label: "소개" },
-  { href: "/privacy", label: "개인정보처리방침" },
-];
+export default function Footer({ locale, dict }: FooterProps) {
+  const categories = [
+    { href: `/${locale}/health`,   label: dict.nav.health },
+    { href: `/${locale}/food`,     label: dict.nav.food },
+    { href: `/${locale}/essay`,    label: dict.nav.essay },
+    { href: `/${locale}/exercise`, label: dict.nav.exercise },
+  ];
 
-export default function Footer() {
+  const siteLinks = [
+    { href: `/${locale}/blog`,    label: dict.footer.allPosts },
+    { href: `/${locale}/about`,   label: dict.footer.about },
+    { href: `/${locale}/privacy`, label: dict.footer.privacy },
+  ];
+
   const year = new Date().getFullYear();
 
   return (
@@ -23,25 +30,24 @@ export default function Footer() {
 
           {/* Brand */}
           <div className="md:col-span-5">
-            <Link href="/" className="inline-block mb-4">
+            <Link href={`/${locale}`} className="inline-block mb-4">
               <span className="font-bold text-[15px] text-stone-900 tracking-tight">
                 <span className="text-amber-500">365</span>
-                <span className="mx-1 text-stone-300">·</span>
+                <span className="mx-1 text-stone-300">&middot;</span>
                 <span>Happy</span>
-                <span className="mx-1 text-stone-300">·</span>
+                <span className="mx-1 text-stone-300">&middot;</span>
                 <span className="text-amber-500">365</span>
               </span>
             </Link>
             <p className="text-sm text-stone-500 leading-[1.85] max-w-xs word-break-keep">
-              매일매일 작은 행복을 발견하는 이야기. 건강, 음식, 운동,
-              그리고 일상의 에세이를 통해 함께 행복을 나눕니다.
+              {dict.footer.description}
             </p>
           </div>
 
           {/* Categories */}
           <div className="md:col-span-3 md:col-start-7">
             <h3 className="text-xs font-semibold uppercase tracking-wider text-stone-400 mb-4">
-              카테고리
+              {dict.footer.categories}
             </h3>
             <ul className="space-y-2.5">
               {categories.map((cat) => (
@@ -60,7 +66,7 @@ export default function Footer() {
           {/* Site Links */}
           <div className="md:col-span-2">
             <h3 className="text-xs font-semibold uppercase tracking-wider text-stone-400 mb-4">
-              사이트
+              {dict.footer.site}
             </h3>
             <ul className="space-y-2.5">
               {siteLinks.map((link) => (
@@ -79,10 +85,10 @@ export default function Footer() {
 
         <div className="border-t border-stone-200 mt-10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-xs text-stone-400">
-            © {year} 365 Happy 365. All rights reserved.
+            &copy; {year} 365 Happy 365. All rights reserved.
           </p>
           <p className="text-xs text-stone-400">
-            Made with love in Korea
+            {dict.footer.madeWith}
           </p>
         </div>
       </div>

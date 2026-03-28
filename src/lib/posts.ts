@@ -2,8 +2,9 @@ import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
 import readingTime from "reading-time";
+import type { Locale } from "./i18n";
 
-const postsDirectory = path.join(process.cwd(), "content/posts");
+const contentBase = path.join(process.cwd(), "content/posts");
 
 export interface PostMeta {
   slug: string;
@@ -22,28 +23,39 @@ export interface Post extends PostMeta {
   content: string;
 }
 
-function ensurePostsDirectory() {
-  if (!fs.existsSync(postsDirectory)) {
-    fs.mkdirSync(postsDirectory, { recursive: true });
+function getPostsDirectory(locale: Locale): string {
+  const localeDir = path.join(contentBase, locale);
+  if (fs.existsSync(localeDir)) return localeDir;
+  // Fallback to ko if locale directory doesn't exist
+  return path.join(contentBase, "ko");
+}
+
+function ensurePostsDirectory(locale: Locale) {
+  const dir = getPostsDirectory(locale);
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
   }
 }
 
-export function getAllPostSlugs(): string[] {
-  ensurePostsDirectory();
-  const fileNames = fs.readdirSync(postsDirectory);
+export function getAllPostSlugs(locale: Locale = "ko"): string[] {
+  ensurePostsDirectory(locale);
+  const dir = getPostsDirectory(locale);
+  const fileNames = fs.readdirSync(dir);
   return fileNames
     .filter((name) => name.endsWith(".mdx") || name.endsWith(".md"))
     .map((name) => name.replace(/\.(mdx|md)$/, ""));
 }
 
-export function getAllPosts(): PostMeta[] {
-  ensurePostsDirectory();
-  const slugs = getAllPostSlugs();
+export function getAllPosts(locale: Locale = "ko"): PostMeta[] {
+  ensurePostsDirectory(locale);
+  const dir = getPostsDirectory(locale);
+  const slugs = getAllPostSlugs(locale);
+  const isKo = locale === "ko" || !fs.existsSync(path.join(contentBase, locale));
 
   const posts = slugs.map((slug) => {
-    const fullPath = fs.existsSync(path.join(postsDirectory, `${slug}.mdx`))
-      ? path.join(postsDirectory, `${slug}.mdx`)
-      : path.join(postsDirectory, `${slug}.md`);
+    const fullPath = fs.existsSync(path.join(dir, `${slug}.mdx`))
+      ? path.join(dir, `${slug}.mdx`)
+      : path.join(dir, `${slug}.md`);
 
     const fileContents = fs.readFileSync(fullPath, "utf8");
     const { data, content } = matter(fileContents);
@@ -54,7 +66,7 @@ export function getAllPosts(): PostMeta[] {
       title: data.title || "",
       excerpt: data.excerpt || "",
       date: data.date || new Date().toISOString().split("T")[0],
-      category: data.category || "에세이",
+      category: data.category || (isKo ? "에세이" : "Essay"),
       tags: data.tags || [],
       author: data.author || "365 Happy",
       coverImage: data.coverImage || "",
@@ -70,11 +82,13 @@ export function getAllPosts(): PostMeta[] {
   });
 }
 
-export function getPostBySlug(slug: string): Post | null {
-  ensurePostsDirectory();
+export function getPostBySlug(slug: string, locale: Locale = "ko"): Post | null {
+  ensurePostsDirectory(locale);
+  const dir = getPostsDirectory(locale);
+  const isKo = locale === "ko" || !fs.existsSync(path.join(contentBase, locale));
 
-  const mdxPath = path.join(postsDirectory, `${slug}.mdx`);
-  const mdPath = path.join(postsDirectory, `${slug}.md`);
+  const mdxPath = path.join(dir, `${slug}.mdx`);
+  const mdPath = path.join(dir, `${slug}.md`);
 
   const fullPath = fs.existsSync(mdxPath)
     ? mdxPath
@@ -93,7 +107,7 @@ export function getPostBySlug(slug: string): Post | null {
     title: data.title || "",
     excerpt: data.excerpt || "",
     date: data.date || new Date().toISOString().split("T")[0],
-    category: data.category || "에세이",
+    category: data.category || (isKo ? "에세이" : "Essay"),
     tags: data.tags || [],
     author: data.author || "365 Happy",
     coverImage: data.coverImage || "",
@@ -103,40 +117,41 @@ export function getPostBySlug(slug: string): Post | null {
   } as Post;
 }
 
-export function getPostsByCategory(category: string): PostMeta[] {
-  return getAllPosts().filter((post) => post.category === category);
+export function getPostsByCategory(category: string, locale: Locale = "ko"): PostMeta[] {
+  return getAllPosts(locale).filter((post) => post.category === category);
 }
 
-export function getFeaturedPosts(limit = 3): PostMeta[] {
-  const allPosts = getAllPosts();
+export function getFeaturedPosts(limit = 3, locale: Locale = "ko"): PostMeta[] {
+  const allPosts = getAllPosts(locale);
   const featured = allPosts.filter((post) => post.featured);
   if (featured.length >= limit) return featured.slice(0, limit);
   const remaining = allPosts.filter((post) => !post.featured);
   return [...featured, ...remaining].slice(0, limit);
 }
 
-export function getLatestPosts(limit = 6): PostMeta[] {
-  return getAllPosts().slice(0, limit);
+export function getLatestPosts(limit = 6, locale: Locale = "ko"): PostMeta[] {
+  return getAllPosts(locale).slice(0, limit);
 }
 
 export function getRelatedPosts(
   currentSlug: string,
   category: string,
-  limit = 3
+  limit = 3,
+  locale: Locale = "ko"
 ): PostMeta[] {
-  return getAllPosts()
+  return getAllPosts(locale)
     .filter((post) => post.slug !== currentSlug && post.category === category)
     .slice(0, limit);
 }
 
-export function getAllCategories(): string[] {
-  const posts = getAllPosts();
+export function getAllCategories(locale: Locale = "ko"): string[] {
+  const posts = getAllPosts(locale);
   const categories = new Set(posts.map((post) => post.category));
   return Array.from(categories);
 }
 
-export function getPostCountByCategory(): Record<string, number> {
-  const posts = getAllPosts();
+export function getPostCountByCategory(locale: Locale = "ko"): Record<string, number> {
+  const posts = getAllPosts(locale);
   return posts.reduce(
     (acc, post) => {
       acc[post.category] = (acc[post.category] || 0) + 1;
